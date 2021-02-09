@@ -1,0 +1,18 @@
+{
+  "name": "anishop",
+  "version": "1.0.0",
+  "description": "Anishop is the marketplace, where you can buy anime products with good price from 20+ verified shops. Also you can order delivery of goods from different anime-shops and we will deliver the goods as one order.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tsettaro",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mustard-ui": "^1.0.4",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.6",
+    "pug": "^3.0.0"
+  }
+}
