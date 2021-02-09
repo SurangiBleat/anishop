@@ -1,0 +1,11 @@
+include header.pug
+
+h2 My app
+h3 #{foo}
+p #{bar}
+each val, index in goods
+    p #{val['category']}
+    img(
+        src='images/' + val['image']
+        class="test"
+    )

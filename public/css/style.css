@@ -1,0 +1,110 @@
+* {
+  font-family: sans-serif;
+}
+
+.wrap {
+  background: #fff;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.content {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: auto;
+}
+
+.site-header {
+  height: 120px;
+  padding: 20px 0;
+  width: 100%;
+}
+
+.site-header h1 {
+  display: inline-block;
+}
+
+.full-width {
+  width: 100%;
+  margin: 2px auto;
+  padding: 0;
+}
+
+.name-of-shop {
+  text-align: center;
+}
+.search-place{
+  position: absolute;
+}
+.footer{
+  width: 100%;
+}
+.in_footer{
+  text-align: start;
+}
+/*---------- card ----------*/
+.card {
+  border: 1px solid #dedede;
+  max-width: 100%;
+}
+
+.card-images {
+  display: block;
+  margin: 3px auto;
+  max-width: 150%;
+  max-height: 240px;
+}
+
+/*---------- good -------*/
+.goods-big-images{
+  display: block;
+  margin-left: 2px auto;
+  height: 150%;
+  max-width: 100%;
+  max-height: 400px;
+}
+
+/*---------- navigation ----------*/
+.site-nav {
+  width: 300px;
+  min-height: 100vh;
+  position: fixed;
+  left: -300px;
+  top: 0;
+  z-index: 999999;
+  padding: 10px;
+  transition: all ease ls;
+  color: #fff;
+  background-color: #42a5f5;
+}
+.clode-buttom-div{
+  text-align: right;
+}
+.show-nav {
+  position:absolute;
+  left: 10px;
+}
+.button-search{
+  background-color: #2ba61f;
+  margin-top: 10px;
+}
+
+ul.category-list a {
+  list-style-type: disc;
+  color: #dedede;
+  font-style: italic;
+  font-size: 25px;
+}
+ul.shop-list a {
+  list-style-type: disc;
+  color: #dedede;
+  font-style: italic;
+  font-size: 25px;
+}

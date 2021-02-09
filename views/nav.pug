@@ -1,0 +1,21 @@
+div(
+    class="site-nav"
+)
+    div(class="close-button-div")
+        button(class="button-primary-outlined close-nav") x
+    div(class="search-place")
+    form(action='/search' method='get')
+        input(name='name' placeholder='Найти' type='search')
+        button(class="button-search engine") Поиск
+    h3(class="cart-header") Товары по категориям
+    div(id="category-list")
+    h3(class="cart-header") Товары по магазинам
+    div(id="shop-list")
+    h3(class="cart-header") Cart
+    div(class="cart-nav")
+    div(class="text-right")
+        a(
+            href="/order"
+            target="_blank"
+        ) 
+            button(class="button-primary-outlined") В корзину

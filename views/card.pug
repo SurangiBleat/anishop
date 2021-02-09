@@ -1,0 +1,15 @@
+div(class='col col-md-4')
+	div(class='card')
+		a(href="goods?id="+val['id'])
+			h3(class='card-title text-center') #{val['name']} [#{val['shop_id']}]
+			img(
+			src='images/'+val['photo']
+			class='card-images'
+			)
+			p(class='text-center') Цена: #{val['cost'].toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$& ')} рублей
+			ui(class='card-actions')
+				li
+					button(
+					dat-goods_id = val['id']
+					class='button button-primary add-to-cart'
+					) В корзину

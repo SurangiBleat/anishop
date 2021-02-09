@@ -1,0 +1,14 @@
+include header.pug
+
+div(class='wrap')
+	div(class='content')
+		header(class='site-header')
+			include site_header
+		h2 Results:	
+		div(class='container')
+			div(class='row')
+				each val, index in goods
+					include card.pug
+
+	include nav
+	include footer
