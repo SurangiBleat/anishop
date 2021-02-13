@@ -39,6 +39,8 @@ app.get('/', function(request, responce){
         });
 });
 
+
+
 app.get('/cat', function(request, responce){
     console.log(request.query.id)
     let catId = request.query.id;
@@ -129,7 +131,7 @@ app.get('/goods', function(request, responce){
 });
 /* APP SEARCH */
 app.get('/search', function (request, responce) {
-    let namae = request.query.name
+    let namae = '%' + request.query.name + '%'
     console.log(namae)
     let goods = new Promise(function(resolve, reject){
         con.query(
