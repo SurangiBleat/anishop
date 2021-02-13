@@ -65,6 +65,8 @@
   margin: 1px auto;
   max-width: 150%;
   max-height: 240px;
+  margin-right: auto;
+  padding-right: inherit;
 }
 
 /*---------- good -------*/
