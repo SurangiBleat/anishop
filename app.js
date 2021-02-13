@@ -104,7 +104,7 @@ app.get('/shop', function(request, responce){
 
     let goods = new Promise(function(resolve, reject){
         con.query(
-            'SELECT * FROM goods WHERE identification='+shopId,
+            'SELECT * FROM goods WHERE identification='+shopId+' ORDER BY RAND()',
             function(error, result){
                 if (error) reject(error);
                 resolve(result);
@@ -124,7 +124,7 @@ app.get('/shop', function(request, responce){
 
 app.get('/goods', function(request, responce){
     console.log(request.query.id);
-    con.query('SELECT * FROM goods WHERE id='+request.query.id, function(error, result, fields){
+    con.query('SELECT * FROM goods WHERE id='+request.query.id+' ORDER BY RAND()', function(error, result, fields){
         if (error) throw error;
         responce.render('goods',{ goods: JSON.parse(JSON.stringify(result)) });
     });
@@ -135,7 +135,7 @@ app.get('/search', function (request, responce) {
     console.log(namae)
     let goods = new Promise(function(resolve, reject){
         con.query(
-            'SELECT * FROM goods WHERE name LIKE "'+namae+'%";',
+            'SELECT * FROM goods WHERE name LIKE "'+namae+'%"'+' ORDER BY RAND()',
             function(error, result){
                 if (error) reject(error);
                 resolve(result);

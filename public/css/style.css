@@ -46,11 +46,24 @@
 .search-place{
   position: absolute;
 }
+/* -------- footer ---------*/
 .footer{
   width: 100%;
 }
 .in_footer{
   text-align: start;
+}
+.footer-heading{
+  right: 10px;
+}
+.container-footer{
+  max-width: 1100px;
+  margin-left: 20px;
+  margin-right: 101px;
+  padding: 30px 0;
+}
+.footer-list{
+  right: 10px;
 }
 /*---------- card ----------*/
 .card {
