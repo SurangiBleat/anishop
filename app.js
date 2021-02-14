@@ -20,23 +20,14 @@ app.listen(3000, function(){
     console.log('node is working! Hooray!')
 });
 app.get('/', function(request, responce){
-    con.query(
-        'SELECT * FROM category',
-        function(error, result){
-            if (error) throw error;
-            //console.log(result);
-            let goods = {}
-            for (let i = 0; i < result.length; i++){
-                goods[result[i]['id']] = result[i];
-            }
-            //console.log(goods);
-            console.log(JSON.parse(JSON.stringify(goods)));
-            responce.render('main', {
-                foo: 'HEY LOSER',
-                bar: 7,
-                goods : JSON.parse(JSON.stringify(goods))
+    let cat = new Promise(function(resolve, reject){
+        con.query(
+            "select id,name, cost, photo, category_id from (select id,name,cost,photo,category_id, if(if(@curr_category != category_id, @curr_category := category_id, '') != '', @k := 0, @k := @k + 1) as ind   from goods, ( select @curr_category := '' ) v ) goods where ind < 3",
+            function(error, result, field){
+                if (error) reject(error);
+                resolve(result);
             });
-        });
+    });
 });
 
 
@@ -104,7 +95,7 @@ app.get('/shop', function(request, responce){
 
     let goods = new Promise(function(resolve, reject){
         con.query(
-            'SELECT * FROM goods WHERE identification='+shopId+' ORDER BY RAND()',
+            'SELECT * FROM goods WHERE identification='+shopId,
             function(error, result){
                 if (error) reject(error);
                 resolve(result);

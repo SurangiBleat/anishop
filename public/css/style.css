@@ -13,6 +13,9 @@
 
 .text-center {
   text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: initial;
 }
 
 .content {
@@ -90,7 +93,9 @@
   max-width: 100%;
   max-height: 400px;
 }
-
+.shop-name-card{
+  margin-left: 15px;
+}
 /*---------- navigation ----------*/
 .site-nav {
   width: 300px;

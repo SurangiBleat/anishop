@@ -8,8 +8,9 @@ div(class='wrap')
 		div(class='container')
 			div(class='row')
 				div(class='col col-md-12')
-					h2(class="panel-title") #{goods[0]['name']}
-				
+					div(class="row")
+						h2(class="panel-title") #{goods[0]['name']}
+						h2(class="pannel-title shop-name-card") [#{goods[0]['shop_id']}]
 				div(class="col col-md-4")
 					img(
 						src="images/"+goods[0]['photo']
