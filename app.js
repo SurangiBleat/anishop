@@ -61,7 +61,7 @@ app.get('/cat', function(request, responce){
 
     let goods = new Promise(function(resolve, reject){
         con.query(
-            'SELECT * FROM goods WHERE category_id='+catId+ ' ORDER BY RAND()',
+            'SELECT * FROM goods WHERE category_id='+catId,
             function(error, result){
                 if (error) reject(error);
                 resolve(result);
