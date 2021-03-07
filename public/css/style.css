@@ -95,8 +95,9 @@
 .card {
   border: 1px solid #dedede;
   margin: auto;
-  max-width: 100%;
-  max-height: 90%;
+  /* max-width: 100%;
+  max-height: 90%; */
+  height: 500px;
 }
 
 .card-images {
