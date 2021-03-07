@@ -1,11 +1,11 @@
-include header.pug
+include header
 
 h2 My app
-h3 #{foo}
-p #{bar}
+p #{foo}
+h3 #{bar}
 each val, index in goods
-    p #{val['category']}
-    img(
-        src='images/' + val['image']
-        class="test"
-    )
+  p #{val['name']}
+  img(
+    src='images/'+val['image']
+    class="test"
+  )

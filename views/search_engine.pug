@@ -7,8 +7,11 @@ div(class='wrap')
 		h2 Results:	
 		div(class='container')
 			div(class='row')
-				each val, index in goods
-					include card.pug
-
-	include nav
+				div(class="paginate 1")
+					div(class="items row")
+						each val, index in goods
+							include card.pug
+					include pagination.html
+		
+		include nav
 	include footer

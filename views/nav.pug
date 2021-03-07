@@ -1,8 +1,8 @@
 div(
-    class="site-nav"
-)
+    class="site-nav button-primary prokrutka"
+)   
     div(class="close-button-div")
-        button(class="button-primary-outlined close-nav") x
+        button(class='button-primary-oulined close-nav') x
     div(class="search-place")
     form(action='/search' method='get')
         input(name='name' placeholder='Найти' type='search')
@@ -12,10 +12,10 @@ div(
     h3(class="cart-header") Товары по магазинам
     div(id="shop-list")
     h3(class="cart-header") Cart
-    div(class="cart-nav")
-    div(class="text-right")
+    div(id="cart-nav")
+    div(class='text-right')
         a(
             href="/order"
             target="_blank"
         ) 
-            button(class="button-primary-outlined") В корзину
+            button(class="") Order

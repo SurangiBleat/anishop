@@ -1,0 +1,60 @@
+include header.pug
+
+div(class='wrap')
+  div(class='content')
+    header(class='site-header')
+      include site_header_order.pug
+
+    div(class='container')
+      div(class='row')
+        div(class='col col-md-12')
+          h3(class="cart-header") Корзина
+          div(id='cart-nav')
+        div(class='col col-md-12')
+          h3 Create order 
+        div(class='col col-md-6')
+          form#anishopu-order(action="")
+                  div(class='form-control')
+                    label(for='username') Имя
+                    input(
+                        type='text',
+                        id='username',
+                        placeholder='Введите своё имя',
+                        )
+                  div(class='form-control')
+                    label(for='phone') Телефон
+                    input(
+                        type='text',
+                        id='phone',
+                        placeholder='+79285773212',
+                        )
+                  div(class='form-control')
+                    label(for='email') Электронная почта
+                    input(
+                        type='text',
+                        id='email',
+                        placeholder='mail@example.com',
+                        )
+                  div(class='form-control')
+                    label(for='address') Адрес, куда вышлем готовый заказ
+                    textarea(
+                        id='address',
+                        placeholder='Страна, город, улица, дом, квартира, индекс',
+                        )
+                  div(class='form-control')
+                    label(for='rule') 
+                      input(
+                          type='checkbox',
+                          id='rule',
+                          value='1'
+                          ) 
+                      span Согласен с 
+                        a(href='/agreement' target="_blank") пользовательским соглашением
+
+                  div(class='form-control text-right')
+                    button(class='button-primary', type='submit') Закончить покупку
+    //include nav.pug
+
+  include footer.pug
+  script(src='js/order.js')
+

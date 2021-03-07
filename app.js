@@ -4,83 +4,77 @@ let app = express();
  * public - name of folder
  */
 app.use(express.static('public'));
-
 app.set('view engine', 'pug');
-
-
+app.use(express.json())
 let mysql = require('mysql');
-
+let moment = require('moment');
+process.env["NODER_TLS_REJECT_UNAUTHORIZED"] = 0;
+const nodemailer = require('nodemailer')
 let con = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: 'toor',
     database: 'anishop'
 });
-app.listen(3000, function(){
-    console.log('node is working! Hooray!')
+app.listen(3000);
+app.get('/', function (req, res) {
+  let cat = new Promise(function (resolve, reject) {
+    con.query(
+      "select id,name, description, cost, category_id, shop_id, photo, identification, ref_link from (select id,name, description, cost, category_id, shop_id, photo, identification, ref_link, if(if(@curr_category != category_id, @curr_category := category_id, '') != '', @k := 0, @k := @k + 1) as ind from goods, ( select @curr_category := '' ) v ) goods where ind < 3",
+      function (error, result, field) {
+        if (error) return reject(error);
+        resolve(result);
+      }
+    );
+  });
+  let catDescription = new Promise(function (resolve, reject) {
+    con.query(
+      "SELECT * FROM category",
+      function (error, result, field) {
+        if (error) return reject(error);
+        resolve(result);
+      }
+    );
+  });
+  Promise.all([cat, catDescription]).then(function (value) {
+    console.log(value[1]);
+    res.render('index', {
+      goods: JSON.parse(JSON.stringify(value[0])),
+      cat: JSON.parse(JSON.stringify(value[1])),
+    });
+  });
 });
-app.get('/', function(request, responce){
-    let cat = new Promise(function(resolve, reject){
-        con.query(
-            "select id,name, cost, photo, category_id from (select id,name,cost,photo,category_id, if(if(@curr_category != category_id, @curr_category := category_id, '') != '', @k := 0, @k := @k + 1) as ind   from goods, ( select @curr_category := '' ) v ) goods where ind < 3",
-            function(error, result, field){
-                if (error) reject(error);
-                resolve(result);
-            });
+
+  app.get('/cat', function (req, res) {
+    console.log(req.query.id);
+    let catId = req.query.id;
+  
+    let cat = new Promise(function (resolve, reject) {
+      con.query(
+        'SELECT * FROM category WHERE id=' + catId,
+        function (error, result) {
+          if (error) reject(error);
+          resolve(result);
+        });
     });
-});
-
-
-
-app.get('/cat', function(request, responce){
-    console.log(request.query.id)
-    let catId = request.query.id;
-
-    // responce.render('cat', {});
-    // con.query(
-    //     'SELECT * FROM cSategory WHERE id='+catId,
-    //     function(error, result){
-    //         if (error) throw err;
-    //         console.log(JSON.parse(JSON.stringify(result)));
-    //         responce.render('main', {
-    //             foo: 'HEY LOSER',
-    //             bar: 7,
-    //             goods : JSON.parse(JSON.stringify(goods))
-    //         });
-    //     });
-
-    let cat = new Promise(function(resolve, reject){
-        con.query(
-            'SELECT * FROM category WHERE id='+catId,
-            function(error, result){
-                if (error) reject(error);
-                resolve(result);
-            });
+    let goods = new Promise(function (resolve, reject) {
+      con.query(
+        'SELECT * FROM goods WHERE category_id=' + catId,
+        function (error, result) {
+          if (error) reject(error);
+          resolve(result);
+        });
     });
-
-
-    let goods = new Promise(function(resolve, reject){
-        con.query(
-            'SELECT * FROM goods WHERE category_id='+catId,
-            function(error, result){
-                if (error) reject(error);
-                resolve(result);
-            });
-    });
-
-    Promise.all([cat,goods]).then(function(value){
-        console.log(value[0]);
-        responce.render('cat', {
-                cat: JSON.parse(JSON.stringify(value[0])),
-                goods: JSON.parse(JSON.stringify(value[1]))
-            });
+  
+    Promise.all([cat, goods]).then(function (value) {
+      res.render('cat', {
+        cat: JSON.parse(JSON.stringify(value[0])),
+        goods: JSON.parse(JSON.stringify(value[1]))
+      });
     })
-
-
-});;
+  });
 
 app.get('/shop', function(request, responce){
-    console.log(request.query.id)
     let shopId = request.query.id;
 
     let shop = new Promise(function(resolve, reject){
@@ -95,7 +89,7 @@ app.get('/shop', function(request, responce){
 
     let goods = new Promise(function(resolve, reject){
         con.query(
-            'SELECT * FROM goods WHERE identification='+shopId,
+            'SELECT * FROM goods WHERE identification='+shopId+' ORDER BY name',
             function(error, result){
                 if (error) reject(error);
                 resolve(result);
@@ -103,7 +97,6 @@ app.get('/shop', function(request, responce){
     });
 
     Promise.all([shop,goods]).then(function(value){
-        console.log(value[1]);
         responce.render('filter_shop', {
                 shop: JSON.parse(JSON.stringify(value[0])),
                 goods: JSON.parse(JSON.stringify(value[1]))
@@ -113,16 +106,26 @@ app.get('/shop', function(request, responce){
 
 });;
 
-app.get('/goods', function(request, responce){
-    console.log(request.query.id);
-    con.query('SELECT * FROM goods WHERE id='+request.query.id+' ORDER BY RAND()', function(error, result, fields){
-        if (error) throw error;
-        responce.render('goods',{ goods: JSON.parse(JSON.stringify(result)) });
+app.get('/goods', function (req, res) {
+    console.log(req.query.id);
+    con.query('SELECT * FROM goods WHERE id=' + req.query.id, function (error, result, fields) {
+      if (error) throw error;
+      res.render('goods', { goods: JSON.parse(JSON.stringify(result)) });
     });
+  });
+
+app.get('/order', function (req, res) {
+  res.render('order');
 });
+
+app.get('/agreement', function (req, res) {
+  res.render('agreement');
+});
+  
 /* APP SEARCH */
 app.get('/search', function (request, responce) {
     let namae = '%' + request.query.name + '%'
+    let namae_2 = request.query.name
     console.log(namae)
     let goods = new Promise(function(resolve, reject){
         con.query(
@@ -134,7 +137,6 @@ app.get('/search', function (request, responce) {
     });
 
     Promise.all([goods]).then(function(value){
-        console.log(value[0]);
         responce.render('search_engine', {
                 goods: JSON.parse(JSON.stringify(value[0]))
             });
@@ -142,7 +144,6 @@ app.get('/search', function (request, responce) {
  });
 /* END */
 app.post('/get-category-list', function (request, responce) {
-   console.log('111');
    con.query('SELECT * FROM category', function(error, result, fields){
        if (error) throw error;
        console.log(result)
@@ -151,7 +152,6 @@ app.post('/get-category-list', function (request, responce) {
 });
 
 app.post('/get-shop-list', function (request, responce) {
-    console.log('222');
     con.query('SELECT * FROM shop', function(error, result, fields){
         if (error) throw error;
         console.log(result)
@@ -159,7 +159,95 @@ app.post('/get-shop-list', function (request, responce) {
     });  
  });
 
+ app.post('/get-goods-info', function (req, res) {
+  if (req.body.key.length !=0){
+    con.query('SELECT id,name,cost, shop_id FROM goods WHERE id IN ('+req.body.key.join(',')+')', function (error, result, fields) {
+      if (error) throw error;
+      console.log(result);
+      let goods = {};
+      for (let i = 0; i < result.length; i++){
+        goods[result[i]['id']] = result[i];
+      }
+      res.json(goods);
+    });
+  }
+  else{
+    res.send('0');
+  }
+});
 
+app.post('/finish-order', function(req, res){
+  if (req.body.key.length != 0){
+    let key = Object.keys(req.body.key);
+    con.query('SELECT id,name,cost, shop_id, ref_link FROM goods WHERE id IN ('+ key.join(',')+')', function (error, result, fields) {
+    if (error) throw error;
+    console.log(result);
+    sendMail(req.body, result).catch(console.error);
+    saveOrder(req.body, result);
+    res.send('1');
+    });
+  }
+  else{
+    res.send('0');
+  }
+});
+
+function saveOrder(data, result) {
+  let sql;
+  sql = "INSERT INTO user_info (user_name, user_phone, user_email,address) VALUES ('" + data.username + "', '" + data.phone + "', '" + data.email + "','" + data.address + "')";
+  con.query(sql, function (error, result) {
+    if (error) throw error;
+  });
+
+  var date = moment().format('MMMM Do YYYY, h:mm:ss a');
+  for (let i = 0; i < result.length; i++) {
+    sql = "INSERT INTO shop_order (user_id, goods_id, goods_cost, goods_amount, total, date, link) VALUES (" + 45 + ", " + result[i]['id'] + ", " + result[i]['cost'] + "," + data.key[result[i]['id']] + "," + data.key[result[i]['id']] * result[i]['cost'] + ", '" + date + "', '" + result[i]['ref_link'] + "')";
+    con.query(sql, function (error, result) {
+      if (error) throw error;
+    });
+  }
+}
+
+async function sendMail(data, result){
+  let res = '<h2> Order in Anishopu </h2>';
+  let total = 0;
+  for (let i = 0; i < result.length; i++){
+    res += `<p>${result[i]['name']} - ${data.key[result[i]['id']]} - ${result[i]['cost']*data.key[result[i]['id']]} ₽ </p>`;
+    total+=result[i]['cost'] * data.key[result[i]['id']];
+  }
+  console.log(res);
+  res +='<hr>';
+  res+=`Total ${total} ₽`;
+  res += `<hr> Username: ${data.username}`;
+  res += `<hr> Phone: ${data.phone}`;
+  res += `<hr> Email: ${data.email}`;
+  res += `<hr> Address: ${data.address}`;
+
+
+let testAccount = await nodemailer.createTestAccount();
+let transporter = nodemailer.createTransport({
+  host: "smtp.ethereal.email",
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: testAccount.user, // generated ethereal user
+    pass: testAccount.pass, // generated ethereal password
+  },
+});
+
+let mailOption = {
+  from : '<takkunshionji@yandex.ru',
+  to : "kamalovantoshka2018@gmail.com,"+data.email,
+  subject: "Заказ принят",
+  text: 'Здравствуйте',
+  html : res
+};
+
+let info = await transporter.sendMail(mailOption);
+console.log("MessageSent: %s", info.messageId);
+console.log("PreviewSent: %s", nodemailer.getTestMessageUrl(info));
+return true;
+}
 
 
 

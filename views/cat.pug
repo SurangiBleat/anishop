@@ -1,17 +1,25 @@
-include header.pug
+include header
 
 div(class='wrap')
-	div(class='content')
-		header(class='site-header')
-			include site_header
-			
-		div(class='container')
-			div(class='row')
-				div(class='col col-md-12')
-					h2 #{cat[0]['category']}
-				each val, index in goods
-					include card.pug
+  div(class='content')
+    header(class='site-header')
+      include site_header
 
-			div #{cat[0]['description']}
-	include nav
-	include footer
+    div(class='container')
+      div(class='row')
+        div(class='col col-md-12')
+          h2 #{cat[0]['category']}
+          div(class="paginate 1")
+              div(class="items row")
+                each val, index in goods
+                  include card.pug
+              include pagination.html
+
+
+
+
+        //- div #{cat[0]['description']}
+    
+    include nav
+  include footer
+  
