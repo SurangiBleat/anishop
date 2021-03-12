@@ -6,11 +6,11 @@ let app = express();
 app.use(express.static('public'));
 app.set('view engine', 'pug');
 app.use(express.json())
-let mysql = require('mysql');
+const mysql = require('mysql2');
 let moment = require('moment');
 process.env["NODER_TLS_REJECT_UNAUTHORIZED"] = 0;
 const nodemailer = require('nodemailer')
-let con = mysql.createPool({
+const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'toor',
