@@ -223,29 +223,34 @@ async function sendMail(data, result){
   res += `<hr> Email: ${data.email}`;
   res += `<hr> Address: ${data.address}`;
 
-
-let testAccount = await nodemailer.createTestAccount();
 let transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email",
-  port: 587,
-  secure: false, // true for 465, false for other ports
+  host: "smtp.yandex.ru",
+  port: 465,
+  secure: true, // true for 465, false for other ports
   auth: {
-    user: testAccount.user, // generated ethereal user
-    pass: testAccount.pass, // generated ethereal password
-  },
+    user: "robot@anishopu.ru", // generated ethereal user
+    pass: "ZzGMc4uEBHRc4tD" // generated ethereal password
+  }
 });
 
-let mailOption = {
-  from : '<takkunshionji@yandex.ru',
-  to : "kamalovantoshka2018@gmail.com,"+data.email,
+let info = await transporter.sendMail({
+  from : '<robot@anishopu.ru',
+  to : data.email,
   subject: "Заказ принят",
   text: 'Здравствуйте',
   html : res
-};
+});
 
-let info = await transporter.sendMail(mailOption);
+// let mailOption = {
+//   from : '<takkunshionji@yandex.ru',
+//   to : "kamalovantoshka2018@gmail.com,"+data.email,
+//   subject: "Заказ принят",
+//   text: 'Здравствуйте',
+//   html : res
+// };
+
 console.log("MessageSent: %s", info.messageId);
-console.log("PreviewSent: %s", nodemailer.getTestMessageUrl(info));
+
 return true;
 }
 
