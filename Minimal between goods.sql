@@ -1,1 +1,0 @@
-WITH table_1 AS (SELECT DISTINCT name, MIN(cost) as cost FROM goods GROUP BY name ORDER BY name) SELECT * FROM table_1, goods WHERE goods.cost = table_1.cost AND category_id=2
