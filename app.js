@@ -3,6 +3,7 @@ let app = express();
 /**
  * public - name of folder
  */
+let zakaz = 1
 app.use(express.static('public'));
 app.set('view engine', 'pug');
 app.use(express.json())
@@ -161,7 +162,7 @@ app.post('/get-shop-list', function (request, responce) {
 
  app.post('/get-goods-info', function (req, res) {
   if (req.body.key.length !=0){
-    con.query('SELECT id,name,cost, shop_id FROM goods WHERE id IN ('+req.body.key.join(',')+')', function (error, result, fields) {
+    con.query('SELECT id,name,cost, shop_id, ref_link FROM goods WHERE id IN ('+req.body.key.join(',')+')', function (error, result, fields) {
       if (error) throw error;
       console.log(result);
       let goods = {};
@@ -232,15 +233,51 @@ let transporter = nodemailer.createTransport({
     pass: "ZzGMc4uEBHRc4tD" // generated ethereal password
   }
 });
-
 let info = await transporter.sendMail({
   from : '<robot@anishopu.ru',
   to : data.email,
   subject: "Заказ принят",
   text: 'Здравствуйте',
-  html : res
+  html : res 
 });
-
+  let manager = '<h1 style="text-align:center"><span style="font-family:Verdana,Geneva,sans-serif">Специально для менеджера</span></h1> ';
+  var date = moment().format('MMMM Do YYYY, h:mm:ss a');
+  let total_2 = 0
+  manager+='<p><span style="font-family:Comic Sans MS,cursive">Клиент сделал заказ №'
+  manager+=zakaz
+  manager+=' '
+  manager+=date
+  manager+='</span></p>'
+  manager+='<p><span style="font-family:Comic Sans MS, cursive">Состав заказа:</span></p><ul>'
+  for (let i = 0; i < result.length; i++){
+    manager += `<li><span style="font-family:Comic Sans MS, cursive">${result[i]['name']} в количестве ${data.key[result[i]['id']]} на общую сумму ${result[i]['cost']*data.key[result[i]['id']]} ₽ (ссылка &ndash;&nbsp;${result[i]['ref_link']})</span></li>`;
+    total_2+=result[i]['cost'] * data.key[result[i]['id']];
+  }
+  manager+='</ul>'
+  manager+='<p><span style="font-family:Comic Sans MS,cursive">Просьба обеспечить своевременную связь с клиентом для уточнения правильности данных.</span></p><p><span style="font-family:Comic Sans MS, cursive">Данные для связи:</span></p>'
+  manager+='<ul>'
+	manager+=`<li><span style="font-family:Comic Sans MS,cursive">Имя &ndash; ${data.username}</span></li>`
+	manager+=`<li><span style="font-family:Comic Sans MS, cursive">Телефон &ndash;&nbsp;${data.phone}</span></li>`
+	manager+=`<li><span style="font-family:Comic Sans MS, cursive">Адрес электронной почты &ndash;&nbsp;${data.email}</span></li>`
+	manager+=`<li><span style="font-family:Comic Sans MS,cursive">Адрес проживания &ndash; ${data.address}</span></li>`
+  manager+='</ul><p><span style="color:#e74c3c"><span style="font-family:Comic Sans MS,cursive">Напоминаю, что в соответствии правилам внутреннего распорядка за уклонение от работы, сотруднику грозить штраф в размере половины заработной платы, а за повторное &ndash; увольнение!</span></span></p><p style="text-align:right">С уважением,</p><p style="text-align:right">Инспектор Робот!</p>'
+  let inspector = nodemailer.createTransport({
+    host: "smtp.yandex.ru",
+    port: 465,
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: "inspector@anishopu.ru", // generated ethereal user
+      pass: "letmespeakfrommyheart" // generated ethereal password
+    }
+  });
+  let alert = await inspector.sendMail({
+    from : '<inspector@anishopu.ru',
+    to : 'kamalovantoshka2018@gmail.com',
+    subject: "НОВЫЙ ЗАКАЗ №"+zakaz,
+    text: 'Активируй html для прочтения',
+    html : manager 
+  });
+  zakaz+=1
 console.log("MessageSent: %s", info.messageId);
 
 return true;
