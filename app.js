@@ -241,14 +241,6 @@ let info = await transporter.sendMail({
   html : res
 });
 
-// let mailOption = {
-//   from : '<takkunshionji@yandex.ru',
-//   to : "kamalovantoshka2018@gmail.com,"+data.email,
-//   subject: "Заказ принят",
-//   text: 'Здравствуйте',
-//   html : res
-// };
-
 console.log("MessageSent: %s", info.messageId);
 
 return true;
