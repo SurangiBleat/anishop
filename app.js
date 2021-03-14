@@ -1,5 +1,5 @@
-let express = require('express')
-let app = express();
+var express = require('express')
+var app = express();
 /**
  * public - name of folder
  */
@@ -279,7 +279,7 @@ let info = await transporter.sendMail({
   });
   zakaz+=1
 console.log("MessageSent: %s", info.messageId);
-
+module.exports = app;
 return true;
 }
 
