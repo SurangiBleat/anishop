@@ -4,19 +4,19 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"YAYA\"",
-    "start": "nodemon src/app.js "
+    "test": "echo \"YAYA\""
   },
   "author": "BANDADI inc.",
   "license": "ISC",
   "dependencies": {
+    "nodemon": "2.0.7",
     "express": "^4.17.1",
     "jquery": "^3.6.0",
     "moment": "^2.29.1",
     "mustard-ui": "0.0.8",
     "mysql2": "^2.2.5",
     "nodemailer": "^6.5.0",
-    "nodemon": "^2.0.7",
     "pug": "^3.0.2"
-  }
+  },
+  "devDependencies": {}
 }

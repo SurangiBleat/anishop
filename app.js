@@ -21,7 +21,7 @@ app.listen(3000);
 app.get('/', function (req, res) {
   let cat = new Promise(function (resolve, reject) {
     con.query(
-      "select id,name, description, cost, category_id, shop_id, photo, identification, ref_link from (select id,name, description, cost, category_id, shop_id, photo, identification, ref_link, if(if(@curr_category != category_id, @curr_category := category_id, '') != '', @k := 0, @k := @k + 1) as ind from goods, ( select @curr_category := '' ) v ) goods where ind < 3",
+      "select id,name, description, cost, category_id, shop_id, photo, identification, ref_link from (select id,name, description, cost, category_id, shop_id, photo, identification, ref_link, if(if(@curr_category != category_id, @curr_category := category_id, '') != '', @k := 0, @k := @k + 1) as ind from goods, ( select @curr_category := '' ) v ) goods where ind < 3 LIMIT 20;",
       function (error, result, field) {
         if (error) return reject(error);
         resolve(result);
