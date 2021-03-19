@@ -16,6 +16,7 @@
     "mustard-ui": "0.0.8",
     "mysql2": "^2.2.5",
     "nodemailer": "^6.5.0",
+    "nodemon": "^2.0.7",
     "pug": "^3.0.2"
   }
 }
