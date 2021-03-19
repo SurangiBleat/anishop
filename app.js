@@ -12,10 +12,10 @@ let moment = require('moment');
 process.env["NODER_TLS_REJECT_UNAUTHORIZED"] = 0;
 const nodemailer = require('nodemailer')
 const con = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'toor',
-    database: 'anishop'
+    host: 'anishopu.ru',
+    user: 'a0522994_goodboy',
+    password: 'jVBQLpmL',
+    database: 'a0522994_anishop'
 });
 app.listen(3000);
 app.get('/', function (req, res) {
