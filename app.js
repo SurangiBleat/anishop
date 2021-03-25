@@ -195,7 +195,7 @@ app.post('/finish-order', function(req, res){
 
 function saveOrder(data, result) {
   let sql;
-  sql = "INSERT INTO user_info (user_name, user_phone, user_email,address) VALUES ('" + data.username + "', '" + data.phone + "', '" + data.email + "','" + data.address + "')";
+  sql = "INSERT INTO user_info (user_name, user_surname,user_phone, user_email,address) VALUES ('" + data.username + "', '" + data.surname + "','" + data.phone + "', '" + data.email + "','" + data.address + "')";
   con.query(sql, function (error, result) {
     if (error) throw error;
   });
@@ -219,10 +219,11 @@ async function sendMail(data, result){
   console.log(res);
   res +='<hr>';
   res+=`Total ${total} ₽`;
-  res += `<hr> Username: ${data.username}`;
-  res += `<hr> Phone: ${data.phone}`;
-  res += `<hr> Email: ${data.email}`;
-  res += `<hr> Address: ${data.address}`;
+  res += `<hr> Имя: ${data.username}`;
+  res += `<hr> Фамилия: ${data.surname}`;
+  res += `<hr> Телефон: ${data.phone}`;
+  res += `<hr> Электронная почта: ${data.email}`;
+  res += `<hr> Адрес: ${data.address}`;
 
 let transporter = nodemailer.createTransport({
   host: "smtp.yandex.ru",
@@ -257,6 +258,7 @@ let info = await transporter.sendMail({
   manager+='<p><span style="font-family:Comic Sans MS,cursive">Просьба обеспечить своевременную связь с клиентом для уточнения правильности данных.</span></p><p><span style="font-family:Comic Sans MS, cursive">Данные для связи:</span></p>'
   manager+='<ul>'
 	manager+=`<li><span style="font-family:Comic Sans MS,cursive">Имя &ndash; ${data.username}</span></li>`
+  manager+=`<li><span style="font-family:Comic Sans MS,cursive">Фамилия &ndash; ${data.surname}</span></li>`
 	manager+=`<li><span style="font-family:Comic Sans MS, cursive">Телефон &ndash;&nbsp;${data.phone}</span></li>`
 	manager+=`<li><span style="font-family:Comic Sans MS, cursive">Адрес электронной почты &ndash;&nbsp;${data.email}</span></li>`
 	manager+=`<li><span style="font-family:Comic Sans MS,cursive">Адрес проживания &ndash; ${data.address}</span></li>`
