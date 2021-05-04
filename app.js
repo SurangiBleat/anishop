@@ -1,9 +1,11 @@
 var express = require('express')
 var app = express();
+//var async = require('asyncawait/async');
+//var await = require('asyncawait/await');
 /**
  * public - name of folder
  */
-let zakaz = 1
+var zakaz = 1
 app.use(express.static('public'));
 app.set('view engine', 'pug');
 app.use(express.json())
@@ -12,16 +14,16 @@ let moment = require('moment');
 process.env["NODER_TLS_REJECT_UNAUTHORIZED"] = 0;
 const nodemailer = require('nodemailer')
 const con = mysql.createConnection({
-    host: 'anishopu.ru',
+    host: 'localhost',
     user: 'a0522994_goodboy',
     password: 'jVBQLpmL',
     database: 'a0522994_anishop'
 });
-app.listen(3000);
+app.listen(80);
 app.get('/', function (req, res) {
   let cat = new Promise(function (resolve, reject) {
     con.query(
-      "select id,name, description, cost, category_id, shop_id, photo, identification, ref_link from (select id,name, description, cost, category_id, shop_id, photo, identification, ref_link, if(if(@curr_category != category_id, @curr_category := category_id, '') != '', @k := 0, @k := @k + 1) as ind from goods, ( select @curr_category := '' ) v ) goods where ind < 3 LIMIT 20;",
+      "SELECT * FROM goods WHERE isindex = 1",
       function (error, result, field) {
         if (error) return reject(error);
         resolve(result);
@@ -195,7 +197,7 @@ app.post('/finish-order', function(req, res){
 
 function saveOrder(data, result) {
   let sql;
-  sql = "INSERT INTO user_info (user_name, user_surname,user_phone, user_email,address) VALUES ('" + data.username + "', '" + data.surname + "','" + data.phone + "', '" + data.email + "','" + data.address + "')";
+    sql = "INSERT INTO user_info (user_name, user_surname,user_phone, user_email,address) VALUES ('" + data.username + "', '" + data.surname + "','" + data.phone + "', '" + data.email + "','" + data.address + "')";
   con.query(sql, function (error, result) {
     if (error) throw error;
   });
@@ -210,7 +212,7 @@ function saveOrder(data, result) {
 }
 
 async function sendMail(data, result){
-  let res = '<h2> Order in Anishopu </h2>';
+  let res = '<h2> Заказ из Anishopu </h2>';
   let total = 0;
   for (let i = 0; i < result.length; i++){
     res += `<p>${result[i]['name']} - ${data.key[result[i]['id']]} - ${result[i]['cost']*data.key[result[i]['id']]} ₽ </p>`;
@@ -218,12 +220,14 @@ async function sendMail(data, result){
   }
   console.log(res);
   res +='<hr>';
-  res+=`Total ${total} ₽`;
+  res+=`Итого ${total} ₽`;
   res += `<hr> Имя: ${data.username}`;
   res += `<hr> Фамилия: ${data.surname}`;
   res += `<hr> Телефон: ${data.phone}`;
   res += `<hr> Электронная почта: ${data.email}`;
   res += `<hr> Адрес: ${data.address}`;
+  res += '<p><span style="font-family:Comic Sans MS,cursive"> В случае проблем пишите на '
+  res += '<a href="mailto:support:anishopu.ru">support:anishopu.ru</a></p>'
 
 let transporter = nodemailer.createTransport({
   host: "smtp.yandex.ru",
@@ -258,7 +262,7 @@ let info = await transporter.sendMail({
   manager+='<p><span style="font-family:Comic Sans MS,cursive">Просьба обеспечить своевременную связь с клиентом для уточнения правильности данных.</span></p><p><span style="font-family:Comic Sans MS, cursive">Данные для связи:</span></p>'
   manager+='<ul>'
 	manager+=`<li><span style="font-family:Comic Sans MS,cursive">Имя &ndash; ${data.username}</span></li>`
-  manager+=`<li><span style="font-family:Comic Sans MS,cursive">Фамилия &ndash; ${data.surname}</span></li>`
+    manager+=`<li><span style="font-family:Comic Sans MS,cursive">Фамилия &ndash; ${data.surname}</span></li>`
 	manager+=`<li><span style="font-family:Comic Sans MS, cursive">Телефон &ndash;&nbsp;${data.phone}</span></li>`
 	manager+=`<li><span style="font-family:Comic Sans MS, cursive">Адрес электронной почты &ndash;&nbsp;${data.email}</span></li>`
 	manager+=`<li><span style="font-family:Comic Sans MS,cursive">Адрес проживания &ndash; ${data.address}</span></li>`
@@ -279,39 +283,8 @@ let info = await transporter.sendMail({
     text: 'Активируй html для прочтения',
     html : manager 
   });
-  zakaz+=1
+  zakaz+=1;
 console.log("MessageSent: %s", info.messageId);
 module.exports = app;
 return true;
 }
-
-
-
-
-// const http = require('http');
-// const fs = require('fs');
-// http.createServer().listen(3000);
-// http.createServer(function(request, responce){
-//     responce.setHeader("Content-Type", "text/html; charset=utf-8;")
-//     if (request.url == '/'){
-//         responce.end('Основная страница <h2> OF MY LIFE </h2> Что я вообще вытворяю?');
-    
-//     } else if (request.url == '/cat'){
-//         responce.end('Category');
-//     } else if (request.url == '/database'){
-//         let myFile = fs.readFileSync('picture.html');;
-//         console.log(myFile);
-//         responce.end(myFile);
-//     } else if (request.url == '/secret'){
-//         let FIL = fs.readFileSync('1.html');
-//         console.log(FIL);
-//         responce.end(FIL);
-//     }
-//     responce.end('Hello! <b> This </b> is your lucky day!');
-// }).listen(3000);S
-
-
-//app.get('/cat', function(request, responce){
-//    responce.end('cat');
-//});
-

@@ -55,10 +55,11 @@ document.querySelector('#anishopu-order').onsubmit = function(event){
                 buttonsStyling: false,
                 title: 'Успешно!',
                 text: 'Скоро с тобой свяжется менеджер для уточнения деталей',
+                timer: 4000,
                 imageUrl : 'https://sun9-65.userapi.com/impf/0HtASn4uF3vQIZsuXuZ0fFU6N_8lss1JdnxBEA/Lavs5CAucso.jpg?size=1200x628&quality=96&sign=5b4346bf6cb86398bfbabc6280cec09b&type=album',
                 confirmButtonText: 'Ок'
-            }).then(function() {
-                window.location = "/";
+            }).then(function(){
+                window.location.href = '/';
             });
         }
         else{
@@ -68,7 +69,7 @@ document.querySelector('#anishopu-order').onsubmit = function(event){
                 text: 'Проверь, все ли ты поля заполнил',
                 imageUrl : 'https://4.downloader.disk.yandex.ru/preview/19b6c85b9c288660c41e6385f27124287fa8a3daa22994f60f37fbbc2a48370f/inf/Bs3QV1A4MFSnmhWzyBFm8dzJnmI81IHYTPQ2GPwvzxJ8AQFWix5sx_6j_9TpzkdgGVgZSc06XvEeCfOHN8rnkg%3D%3D?uid=880658809&filename=gthink.png&disposition=inline&hash=&limit=0&content_type=image%2Fpng&owner_uid=880658809&tknv=v2&size=1903x969',
                 confirmButtonText: 'Ок'
-        })
+        });
         }
     })
 }

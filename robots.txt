@@ -1,0 +1,4 @@
+User-Agent: *
+Disallow: /cat
+Disallow: /shop
+Disallow: /goods

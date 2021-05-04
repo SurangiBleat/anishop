@@ -52,7 +52,7 @@ function showCart(data) {
     out += '</tr>';
     total += cart[key]*data[key]['cost'];
   }
-  out += `<tr><td colspan="3">Total: </td><td>${total} ₽</td></tr>`;
+  out += `<tr><td colspan="3">Итого: </td><td>${total} ₽</td></tr>`;
   out += '</tbody></table>';
   document.querySelector('#cart-nav').innerHTML = out;
   document.querySelectorAll('.cart-minus').forEach(function(element){
